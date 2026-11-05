@@ -1,0 +1,76 @@
+{
+  "name": "dsh-echo-qq",
+  "version": "0.2.0-preview.1",
+  "private": true,
+  "description": "DSH Echo QQ桥：OneBot私群消息/文件与默认禁用的官方主人文字C2C适配",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./contract": "./lib/contract.js",
+    "./envelope": "./lib/envelope.js",
+    "./onebot": "./lib/onebot.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "web/",
+    "scripts/",
+    "docs/INSTALLATION.md",
+    "docs/TESTING.md",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "THIRD_PARTY.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "PRIVACY.md",
+    "RELEASE_NOTES.md"
+  ],
+  "comment:packaging": "两个独立tgz；根包包含lib/web/scripts、INSTALLATION与TESTING及许可/治理文档；历史本机验收报告和测试证据不随包分发。",
+  "engines": {
+    "node": ">=24"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "comment:hostPackages": "生产通过ctx.get消费宿主服务，不自动安装DSH或宿主插件树；公开宿主测试版本由memory仓显式prepare脚本准备。",
+  "comment:compat": "v0.1.6:peerDependencies 是 0.2.0 起的兼容性声明(安装与启动都拿它对照 dsh --version,不满足要显式豁免)。只声明 @deepseek-ai/dsh —— 宿主包照上面的理由不声明。实测世代:0.1.5-rc.3(现役)与 0.2.0-rc.2(沙盒验收,见主包 docs/COMPAT_DSH_0.2.md)。",
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.1.5-rc.3 <0.3.0"
+  },
+  "dependencies": {
+    "ws": "8.22.1"
+  },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "acceptance": "node scripts/acceptance.mjs",
+    "test": "node scripts/test.mjs unit",
+    "test:integration": "node scripts/test.mjs integration",
+    "test:all": "node scripts/test.mjs all",
+    "pack:check": "node scripts/pack-check.mjs",
+    "test:install": "node scripts/sandbox-install.mjs",
+    "test:prepare-cli": "node scripts/prepare-cli-source.mjs"
+  },
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "qq",
+    "onebot",
+    "napcat",
+    "channel"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.4"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh": {
+      "optional": true
+    }
+  }
+}

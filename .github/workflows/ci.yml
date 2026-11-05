@@ -1,0 +1,49 @@
+name: Node24 release checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  standalone:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: npm-shrinkwrap.json
+      - run: npm ci --legacy-peer-deps --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: npm run test:install
+      - run: npm run pack:check
+  cross-repository:
+    if: ${{ github.event.repository.private == false && github.event_name != 'pull_request' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: dsh-qq-bridge
+          persist-credentials: false
+      # Requires the companion repository to be public. No cross-repo PAT.
+      - uses: actions/checkout@v4
+        with:
+          repository: Heart3-XDUGT2/dsh-memory-agent
+          path: dsh-memory-agent
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+        working-directory: dsh-memory-agent
+      - run: npm ci --legacy-peer-deps --ignore-scripts
+        working-directory: dsh-qq-bridge
+      - run: npm run test:prepare-cli
+        working-directory: dsh-qq-bridge
+      - run: npm run test:all
+        working-directory: dsh-qq-bridge

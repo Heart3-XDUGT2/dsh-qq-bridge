@@ -1,0 +1,24 @@
+node_modules/
+__pycache__/
+*.pyc
+*.log
+# 本机研究草稿区(2026-09-29 交接时补;与主仓 dsh-echo 同一条)—— 别让临时 dump 进 git
+/.scratch/
+# 密钥纪律:配置住数据目录,但万一有人在这里留了一份,别让它进 git
+config.json
+.env
+
+# Private runtime data and local credentials
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite*
+*.log
+config.json
+profile.json
+/credentials/
+/state/
+/backups/
+/.taste-skill/

@@ -1,0 +1,7 @@
+# dsh-echo-qq — bundle patch:作为 profile bundle 注册时 loader 自动应用,
+# 把 QQ 渠道插件挂载进 cordis 插件表(与 dsh-echo / afaccess 同款配方)。
+# 2026-09-28 真机切换后第一次热重载:改这一行只是为了让 profile 的 patchReload=live
+# 看见 patch 有变动(顺便验证"改 lib/ + 碰一下 patch 就能重载,不用重启宿主")。
+- insert:
+    - id: echo-qq
+      name: dsh-echo-qq

@@ -1,0 +1,5 @@
+# 全仓 LF-only(与主仓 dsh-echo 同一纪律):不依赖谁的本机 core.autocrlf
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary

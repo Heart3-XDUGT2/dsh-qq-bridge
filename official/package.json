@@ -1,0 +1,40 @@
+{
+  "name": "dsh-echo-qq-official",
+  "version": "0.2.0-preview.1",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.1.5-rc.3 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node ../scripts/test.mjs official-unit",
+    "test:integration": "node ../scripts/test.mjs official-integration"
+  },
+  "license": "MIT",
+  "description": "默认禁用的官方QQ主人C2C原型；现役Echo缺完整回复关联时保持关闭，不另建Agent。",
+  "files": [
+    "lib/",
+    "scripts/",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY.md"
+  ],
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh": {
+      "optional": true
+    }
+  }
+}

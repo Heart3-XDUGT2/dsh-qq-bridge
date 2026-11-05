@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Echo · QQ 渠道</title>
+<style>
+  :root { --bg:#12151b; --card:#1a1f28; --line:#272e3a; --fg:#e8ecf3; --dim:#8b95a7; --ok:#4ec9a0; --warn:#e0b25c; --bad:#e06c75 }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.6 "Segoe UI", system-ui, sans-serif }
+  header { padding:20px 24px 8px }
+  h1 { margin:0; font-size:18px; font-weight:600 }
+  header p { margin:4px 0 0; color:var(--dim); font-size:12px }
+  main { padding:12px 24px 32px; display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)) }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px }
+  .card h2 { margin:0 0 10px; font-size:12px; font-weight:600; letter-spacing:.06em; color:var(--dim); text-transform:uppercase }
+  .row { display:flex; justify-content:space-between; gap:12px; padding:3px 0 }
+  .row .k { color:var(--dim) }
+  .row .v { text-align:right; word-break:break-all }
+  .ok { color:var(--ok) } .warn { color:var(--warn) } .bad { color:var(--bad) }
+  .wide { grid-column:1 / -1 }
+  ul { margin:6px 0 0; padding-left:18px } li { margin:2px 0 }
+  code { background:#0d1015; border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12px }
+  footer { padding:0 24px 28px; color:var(--dim); font-size:12px }
+</style>
+</head>
+<body>
+<header>
+  <h1>Echo · QQ 渠道</h1>
+  <p>嘴在这一页 —— 脑(人格/记忆/气泡/节奏)在主包 <code>dsh-echo</code> 里。每 2 秒自动刷新。</p>
+</header>
+<main>
+  <section class="card">
+    <h2>总闸与连接</h2>
+    <div class="row"><span class="k">总闸</span><span class="v" id="enabled">—</span></div>
+    <div class="row"><span class="k">反向 WS</span><span class="v" id="listening">—</span></div>
+    <div class="row"><span class="k">NapCat 连接</span><span class="v" id="clients">—</span></div>
+    <div class="row"><span class="k">存活</span><span class="v" id="stale">—</span></div>
+    <div class="row"><span class="k">地址</span><span class="v" id="addr">—</span></div>
+  </section>
+
+  <section class="card">
+    <h2>接缝(脑 ↔ 嘴)</h2>
+    <div class="row"><span class="k">通道模式</span><span class="v" id="mode">—</span></div>
+    <div class="row"><span class="k">主包服务</span><span class="v" id="svc">—</span></div>
+    <div class="row"><span class="k">服务名</span><span class="v" id="svcname">—</span></div>
+    <div class="row"><span class="k">唯一的路</span><span class="v" id="base">—</span></div>
+  </section>
+
+  <section class="card">
+    <h2>收发计数</h2>
+    <div class="row"><span class="k">入站(被收下)</span><span class="v" id="cin">—</span></div>
+    <div class="row"><span class="k">入站(被拒)</span><span class="v" id="crej">—</span></div>
+    <div class="row"><span class="k">出站(交给 OneBot)</span><span class="v" id="cout">—</span></div>
+    <div class="row"><span class="k">送达确认</span><span class="v" id="cack">—</span></div>
+    <div class="row"><span class="k">错误</span><span class="v" id="cerr">—</span></div>
+  </section>
+
+  <section class="card">
+    <h2>最近</h2>
+    <div class="row"><span class="k">最后入站</span><span class="v" id="lin">—</span></div>
+    <div class="row"><span class="k">最后出站</span><span class="v" id="lout">—</span></div>
+    <div class="row"><span class="k">最后错误</span><span class="v" id="lerr">—</span></div>
+    <div class="row"><span class="k">白名单人数</span><span class="v" id="allow">—</span></div>
+  </section>
+
+  <section class="card wide">
+    <h2>空间评论白名单</h2>
+    <p style="margin:0 0 8px;color:var(--dim);font-size:12px">
+      只有名单里的人评论她，她才会感知并回复。<b>留空 = 只感知主人</b>。一行一个 QQ 号。
+    </p>
+    <textarea id="wl" rows="4" spellcheck="false"
+      style="width:100%;box-sizing:border-box;background:#0d1015;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font:13px/1.6 ui-monospace,Consolas,monospace"
+      placeholder="880000001&#10;880000002"></textarea>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
+      <button id="wlsave" style="background:#2a3446;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 14px;cursor:pointer">保存</button>
+      <span id="wlmsg" style="color:var(--dim);font-size:12px"></span>
+    </div>
+    <p style="margin:8px 0 0;color:var(--dim);font-size:12px">
+      生效后 <code>/api/echo-qq/status</code> 的 <code>qzone.watchList</code> 会跟着变（≤1 秒）。
+      这个框只写 <code>qzoneWatchList</code> 一个键，别的配置还是得改 <code>config.json</code>。
+    </p>
+  </section>
+
+  <section class="card wide">
+    <h2>配置问题(有事就在这儿说)</h2>
+    <ul id="problems"><li>—</li></ul>
+  </section>
+
+  <section class="card wide">
+    <h2>这一页怎么用</h2>
+    <p style="margin:0;color:var(--dim)">
+      它是**诊断页**,不是控制台:改配置请改 <code id="cfgpath">(状态接口会给真实路径)</code>
+      (改完刷新即生效;总闸/端口/口令一类的改动要重启 <code>dsh web</code>)。
+      页面每请求现读,改 <code>web/</code> 里的文件刷新就见效。
+    </p>
+  </section>
+</main>
+<footer>dsh-echo-qq · 骨架版(plan 的 S2-a):真机收发在 S2-b,旧桥退役在 S3 —— 见 <code>CHANGELOG.md</code></footer>
+<script src="./app.js"></script>
+</body>
+</html>

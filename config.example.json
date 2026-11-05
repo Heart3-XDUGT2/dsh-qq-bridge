@@ -1,0 +1,15 @@
+{
+  "enabled": false,
+  "host": "127.0.0.1",
+  "port": 6700,
+  "accessToken": "",
+  "allowedUsers": [],
+  "replyMaxChars": 500,
+  "heartbeatMs": 30000,
+  "maxMisses": 3,
+  "pollMs": 2000,
+  "segmentGapMs": 500,
+  "inboundRetryTimes": 6,
+  "inboundRetryBaseMs": 1500,
+  "transport": "auto"
+}
