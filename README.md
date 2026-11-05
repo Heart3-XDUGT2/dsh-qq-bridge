@@ -1,8 +1,14 @@
 # Echo QQ Bridge
 
+**项目队友：[Peirar](https://github.com/Peirar) · [Terabinaryte](https://github.com/Terabinaryte)**
+
+发起与维护：[Yotaoer](https://github.com/Yotaoer)
+
 DSH Echo渠道插件。仓库名`dsh-qq-bridge`，运行包名仍是`dsh-echo-qq`。人格、记忆与会话由[dsh-memory-agent](https://github.com/Heart3-XDUGT2/dsh-memory-agent)提供，不另建陪伴Agent或迁移数据库。
 
 `0.2.0-preview.1`是GitHub预发布候选，非npm发布或真实账号全功能验收承诺。
+
+界面截图见 [Echo 面板预览](https://github.com/Heart3-XDUGT2/dsh-memory-agent#界面预览)。
 
 ## 实际能力
 
